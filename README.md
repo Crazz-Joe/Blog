@@ -47,7 +47,7 @@
     |- .gitignore(这里说明了那些文件及文件夹不上传到代码库里面)
 ```
 ## 前端开发需要学习的内容
-* swig(模版引擎，用在html文件中)![教程](http://www.cnblogs.com/elementstorm/p/3142644.html)
+* swig(模版引擎，用在html文件中)automatic![教程](http://www.cnblogs.com/elementstorm/p/3142644.html)
 * bootstrap(这个不用多说，强烈推荐使用)
 * less(最好学会用这个写css)
 * express + body-parser(表单处理时要用)
