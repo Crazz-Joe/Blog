@@ -50,11 +50,18 @@
 * swig(模版引擎，用在html文件中)
 [教程](http://www.cnblogs.com/elementstorm/p/3142644.html)
 * bootstrap(这个不用多说，强烈推荐使用)
+[Bootstrap中文网](http://www.bootcss.com/)
 * less(最好学会用这个写css)
+[Less教程](http://www.bootcss.com/p/lesscss/)
 * express + body-parser(表单处理时要用)
+[Github - body-parser](https://github.com/expressjs/body-parser)
 * express + formidable(上传文件时要用)
+[Github - formidable](https://github.com/felixge/node-formidable)
 * cookie-parser + express-session(登录、会话时要用到)
+[Github - cookie-parser](https://github.com/expressjs/cookie-parser)
+[Github - express-session](https://github.com/expressjs/session)
 * mongoose(与数据库交互时要用到)
+[教程](https://cnodejs.org/topic/504b4924e2b84515770103dd)
 
 ## 前端开发流程
 1. 将路由请求写在routes.js文件里；
