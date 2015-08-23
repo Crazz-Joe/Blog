@@ -1,5 +1,14 @@
 # 实验室内容管理系统
 
+## 说在前面
+1. 请使用`git clone git@github.com:FeWeb/Blog.git`克隆这个库
+2. 克隆完之后，在本地创建dev分支，`git checkout -b dev origin/dev`
+3. 为确保是在dev分之下修改，每次提交修改前执行：`git checkout dev`
+4. 提交修改：`git add -A`, `git commit -m "<提交说明>"`
+5. 提交后在本地的dev分之上上传到dev分支：`git push origin dev`
+6. 若出现冲突，请先使用`git pull`查看冲突
+7. Windows图形界面用户请自行查找教程
+
 ## 项目结构
 ```
 - Blog(项目根目录)
@@ -38,7 +47,7 @@
     |- .gitignore(这里说明了那些文件及文件夹不上传到代码库里面)
 ```
 ## 前端开发需要学习的内容
-* swig(模版引擎，用在html文件中)
+* swig(模版引擎，用在html文件中)![教程](http://www.cnblogs.com/elementstorm/p/3142644.html)
 * bootstrap(这个不用多说，强烈推荐使用)
 * less(最好学会用这个写css)
 * express + body-parser(表单处理时要用)
@@ -53,5 +62,12 @@
 4. 在views文件夹里写好模版；
 5. 将模版要用到的js和css文件以及图片都写到publics里面
 6. 表单上传的文件存到uploads文件夹里
+
+## 规范
+> 1. 注意将开发过程中的代码传到`dev`分支,命令：`git push origin dev`；
+> 2. 注意设置`.gitignore`文件，不要将缀余文件上传上来；
+> 3. 一个缩进请用4个空格，不要用`tab`；
+> 4. 一定要注释，代码要写得易看；
+> 5. 本系统采用模块化开发，一定要遵守；
 
 ## 已上传的版本有一个MVC的例子，可以看看，以后我会多写一些例子供参考
