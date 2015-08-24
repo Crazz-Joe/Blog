@@ -1,6 +1,7 @@
 // 加载npm包
 var app = require('express')();
 var mongoose = require('mongoose');
+var MongoSessionStore = require('session-mongoose')(require('connect'));
 // 加载Node模块
 var config = require('./config/config.js'); //参数设置文件
 var domain = require('./middleware/error.js'); //域处理异常
@@ -8,6 +9,8 @@ var thread = require('./middleware/cluster.js'); //多线程显示
 var test = require('./middleware/test.js'); //单元测试
 var admin_routes = require('./blog/routes/admin_routes.js'); //加载管理员页面路由
 var routes = require('./blog/routes/routes.js');
+
+var sessionStore = new MongoSessionStore({url: config.mongo.connectionString});
 
 // 初始化配置
 require('./config/init.js')(app, mongoose);
@@ -33,6 +36,8 @@ app.use(require('express').static(__dirname + '/publics'));
 app.use(require('body-parser')());
 // 加载cookie-parser来设置和访问cookie
 app.use(require('cookie-parser')(config.cookieSecret));
+// 加载会话
+app.use(require('express-session')({store: sessionStore}));
 
 // 路由
 admin_routes(app);
