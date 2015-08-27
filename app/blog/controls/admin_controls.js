@@ -1,6 +1,21 @@
 var models = require('../models/models.js');
 // 管理员后台控制器
 
+var toArray = function(data){
+    if(typeof(data) === 'string'){
+        data = [data];
+        return data;
+    }
+    return data;
+}
+
+var isEnpty = function(data){
+    for(item in data){
+        return false;// 不为空
+    }
+    return true;// 为空
+}
+
 // 登录页面
 exports.login = function(req, res){
     res.render('admin_login', {
@@ -10,9 +25,10 @@ exports.login = function(req, res){
 };
 // 登录处理
 exports.login_process = function(req, res){
+    req.session.user = req.body.user;
     var user = req.body.user;
     var pwd = req.body.pwd;
-    models.users.find({userName: user, password: pwd}, function(err, users){
+    models.User.find({userName: user, password: pwd}, function(err, users){
         if(err) return console.error(err);
         if(users.length){
             var context = users[0];
@@ -31,35 +47,90 @@ exports.login_process = function(req, res){
 };
 // 管理员界面
 exports.admin = function(req, res){
-    res.render('admin');
+    if(req.session.user){
+        console.log(req.session);
+        res.render('admin', {
+            title: '管理员操作界面',
+            username: req.session.user
+        });
+    }
+    else{
+        res.redirect(303, '/admin/login');
+    }
 };
-
-// 管理员操作范例
-exports.admin_process = function(req, res){
-    var thr = req.body.through;
-    var user = req.body.user;
-    models.users.find({userName: user}, function(err, users){
+// 添加管理员
+exports.admin_add = function(req, res){
+    console.log("Go");
+    models.User.find({userName: req.session.user}, function(err, users){
         if(err) return console.error(err);
         if(users.length){
-            var context = users[0];
-            models.users.update({userName: context.user}, {$set: {through: thr}}, function(err){
-                if(err) return console.error(err);
-                console.log('更新成功！');
-                res.redirect(303, '/admin/success');
+            var groups = users[0].group;
+            res.render('admin_add', {
+                title: '添加管理员',
+                groups: groups
             });
         }
         else{
-            console('用户名或密码错误');
-            res.render('admin', {
-                title: '管理员操作界面',
-                err: true,
-                signal: '用户不存在'
+            res.redirect(303, '/admin/login');
+        }
+    });
+};
+// 添加管理员处理函数
+exports.admin_add_process = function(req, res){
+    var newUser = req.body.username;
+    var newEmail = req.body.email;
+    var newPhone = req.body.phone;
+    models.User.find({
+        $or: [
+            {userName: newUser},
+            {email: newEmail},
+            {phone: newPhone}
+        ]
+    }, function(err, users){
+        if(err) return console.error(err);
+        console.log(users);
+        // 将单个字符串放进数组中
+        req.body.group = toArray(req.body.group);
+        console.log(req.body);
+        console.log(typeof(users));
+        if(isEnpty(users)){
+            models.User.create({
+                trueName: req.body.truename,
+                userName: req.body.username,
+                password: req.body.password,
+                email: req.body.email,
+                phone: req.body.phone,
+                through: false,
+                control: {
+                    userClass: 'admin'
+                },
+                group: req.body.group
+            }, function(err, datas){
+                if(err) return console.error(err);
+                res.redirect(303, '/admin/add/success');
+            });
+        }
+        else{
+            console.log(users);
+            res.render('admin_add', {
+                error: true,
+                signal: '对不起，用户名或手机号或邮箱重复！',
+                title: '添加管理员',
+                groups: users[0].group
             });
         }
     });
 };
-
-// 
-exports.admin_success = function(req, res){
-    res.render('success');
+// 添加管理员成功页面
+exports.admin_add_success = function(req, res){
+    res.render('success.html');
 };
+
+// 修改管理员——显示能被修改的管理员用户名邮箱，审核情况
+// exports.admin_list = function(req, res){
+//     models.User.find({userName: req.session.user}, function(err, users){
+//         if(err) return console.error(err);
+        
+//         models.User.find({});
+//     });
+// };

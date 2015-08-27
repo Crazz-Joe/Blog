@@ -85,5 +85,5 @@ User.find(function(err, users){
 });
 
 // 导出模型
-exports.users = User;
-exports.articles = Article;
+exports.User = User;
+exports.Article = Article;

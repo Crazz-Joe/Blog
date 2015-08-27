@@ -7,8 +7,12 @@ module.exports = function(app){
     app.post('/admin/login', controls.login_process);
     // 管理员界面
     app.get('/admin', controls.admin);
-    // 管理员操作范例
-    app.post('/admin', controls.admin_process);
-    // 处理成功的页面
-    app.get('/admin/success', controls.admin_success);
+    // 添加管理员界面
+    app.get('/admin/add', controls.admin_add);
+    // 管理员添加处理
+    app.post('/admin/add', controls.admin_add_process);
+    // 管理员添加成功
+    app.get('/admin/add/success', controls.admin_add_success);
+    // 修改管理员信息列表页面
+    // app.get('/admin/list', controls.admin_list);
 };
