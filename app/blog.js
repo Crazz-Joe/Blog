@@ -1,4 +1,5 @@
 // 加载npm包
+var express=require("express");
 var app = require('express')();
 var mongoose = require('mongoose');
 var MongoSessionStore = require('session-mongoose')(require('connect'));
@@ -32,13 +33,15 @@ app.use(test);
 
 // 加载设置静态文件目录的中间件
 app.use(require('express').static(__dirname + '/publics'));
+//文件上传目录
+app.use(require('express').static(__dirname + '/uploads'));
+
 // 加载表单处理中间件
 app.use(require('body-parser')());
 // 加载cookie-parser来设置和访问cookie
 app.use(require('cookie-parser')(config.cookieSecret));
 // 加载会话
 app.use(require('express-session')({store: sessionStore}));
-
 // 路由
 admin_routes(app);
 routes(app);

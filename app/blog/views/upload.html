@@ -1,0 +1,17 @@
+{% extends './layouts/main.html' %}
+{% block content %}
+<form enctype="multipart/form-data" method="post" action="">
+	<input type="file" name="filepath">
+	<button type="submit">上传</button>
+</form>
+<div class="showPic">
+	{% autoescape false %}
+    {{ img }}
+    {% endautoescape %}
+</div>
+<div class="download">
+	{% autoescape false %}
+    {{ download }}
+    {% endautoescape %}
+</div>
+{% endblock %}

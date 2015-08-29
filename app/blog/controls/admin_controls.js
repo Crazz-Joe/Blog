@@ -126,11 +126,3 @@ exports.admin_add_success = function(req, res){
     res.render('success.html');
 };
 
-// 修改管理员——显示能被修改的管理员用户名邮箱，审核情况
-// exports.admin_list = function(req, res){
-//     models.User.find({userName: req.session.user}, function(err, users){
-//         if(err) return console.error(err);
-        
-//         models.User.find({});
-//     });
-// };
