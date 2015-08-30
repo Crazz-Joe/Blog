@@ -33,8 +33,6 @@ app.use(test);
 
 // 加载设置静态文件目录的中间件
 app.use(require('express').static(__dirname + '/publics'));
-//文件上传目录
-app.use(require('express').static(__dirname + '/uploads'));
 
 // 加载表单处理中间件
 app.use(require('body-parser')());

@@ -23,11 +23,11 @@ var articleSchema = mongoose.Schema({
     content: String,
     time: Date,
     classes: {
-        // 待写
         // 格式为
         // 一级分组：{
             // 二级分组: class
             // }
+        
     }, //文章所属分组
     tag: [String], //标签
     comments: {
@@ -42,10 +42,13 @@ var articleSchema = mongoose.Schema({
             time: Date
         }] //游客留言
     },
-    files: [{
-        // 待写
+    files: [
         // 格式为"fileName: url"
-    }]
+        {
+            fileName:String,
+            filepath:String
+        }
+    ]
 });
 
 // 绑定模型
@@ -83,7 +86,40 @@ User.find(function(err, users){
         console.dir(docs);
     });
 });
-
+//初始化文章
+Article.find(function(err,articles){
+     if (articles.length) return;
+     new Article({
+        title:"mongodb教程",
+        author:"nancy",
+        content:"MongoDB是一个跨平台，面向文档的数据库,提供高性能，高可用性和易于扩展.MongoDB是工作在集合和文档上一种概念。",
+        classes:{
+            "后台工具":{
+                "数据库":"mongodb"
+            }
+        },
+        tags:[
+          "database",
+          "mongodb",
+          "数据库",
+          "教程入门"
+        ],
+        comments:{
+            users:[{
+                userName:"green",
+                content:"这教程好"
+            }],
+            visitor:[{
+                userEmail:"123456@qq.com",
+                content:"赞赞哒",              
+            }]
+        }
+        
+     }).save(function(err,docs){
+        if (err) return console.log(err);
+        console.console.dir(docs);
+     })
+})
 // 导出模型
 exports.User = User;
 exports.Article = Article;
