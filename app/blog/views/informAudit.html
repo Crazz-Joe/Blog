@@ -1,0 +1,74 @@
+{% extends './layouts/main.html' %}
+{% block content %}
+<style>
+    .list-group-item div{
+        display: inline;
+        width: 25%;
+        margin-left: 14%;
+    }
+</style>
+<div style="width:80%;margin:0 auto;margin-top:20px;" class="panel panel-default">
+    <div class="panel-body">
+        <h1>信息审核</h1>
+    </div>
+</div>
+<h3 id="informAudit" style="width:80%;margin:0 auto;margin-top:2px">welcome to {{curUser}}     审核注册信息</h3>
+<div style="width:80%;margin:0 auto;">
+        <ul class="list-group" id="list_group">
+            <li class="list-group-item">
+                <div id="truename">用户名</div>
+                <div id="usename">姓名</div>
+                <div id="email">邮箱</div>
+                <div id="status" style="float:right;margin-left:4.5%;">审核状态</div>
+            </li>
+            {{dataArray}}
+            {% for item in group %}
+                <li class="list-group-item">
+                    <div class="username">{{item.username}}</div>
+                    <div class="truename">{{item.truename}}</div>
+                    <div class='email'>{{item.email}}</div>
+                    <div style="float:right;margin-left:5%;" id="showBtn">
+                        <button type="button" class="btn btn-primary" id="pass" data-toggle="button" value="通过" style="padding:0px 8px;margin:0 0 0 6%;">通过</button>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+</div>
+<script>
+    window.onload = function(){
+        var list = document.getElementById('list_group');
+        var listLi = list.getElementsByTagName('li');
+        for (var i = 1; i < listLi.length; i++) {
+            listLi[i].addEventListener('click',function(e){
+                if (e.target) {
+                    var parentN = e.target.parentNode;
+                    var grandpaNode= parentN.parentNode;
+                    var divlist = grandpaNode.getElementsByTagName('div');
+
+                    var usename = divlist[0].innerHTML;
+                    var truename = divlist[1].innerHTML;
+                    var parmas = {
+                        user:usename,
+                        trueNa:truename
+                    };
+                    $.ajax({
+                        url:'/pass',
+                        type:"POST",                    
+                        cache:false,
+                        timeout:5000,
+                        data:parmas,
+                        dataType:"json",
+                        success:function(callback){
+                            e.target.innerHTML = "已审核";
+                            alert('已通过审核');
+                        },
+                        error:function(error){
+                            console.log(error);
+                        }
+                    });
+                };
+            });
+        }
+    };
+</script>
+{% endblock %}

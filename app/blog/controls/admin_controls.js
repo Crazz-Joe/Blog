@@ -10,6 +10,7 @@ exports.login = function(req, res){
 };
 // 登录处理
 exports.login_process = function(req, res){
+    req.session.user = req.body.user;
     var user = req.body.user;
     var pwd = req.body.pwd;
     models.users.find({userName: user, password: pwd}, function(err, users){
@@ -17,7 +18,7 @@ exports.login_process = function(req, res){
         if(users.length){
             var context = users[0];
             console.log('用户' + context.userName + '登录');
-            res.redirect(303, '/admin');
+            res.redirect(303, '/informAudit');
         }
         else{
             console.log('用户名或密码错误');
@@ -34,32 +35,51 @@ exports.admin = function(req, res){
     res.render('admin');
 };
 
-// 管理员操作范例
-exports.admin_process = function(req, res){
-    var thr = req.body.through;
-    var user = req.body.user;
-    models.users.find({userName: user}, function(err, users){
-        if(err) return console.error(err);
-        if(users.length){
-            var context = users[0];
-            models.users.update({userName: context.user}, {$set: {through: thr}}, function(err){
-                if(err) return console.error(err);
-                console.log('更新成功！');
-                res.redirect(303, '/admin/success');
-            });
-        }
-        else{
-            console('用户名或密码错误');
-            res.render('admin', {
-                title: '管理员操作界面',
-                err: true,
-                signal: '用户不存在'
-            });
-        }
-    });
-};
+//审核页面显示
+exports.informAudit = function(req,res){
+    var dataArray = []; //定义数据
+    console.log(req.session.user);
+    if (req.session.user) {
+        models.users.findOne({userName:req.session.user},function(err,current){
+            if(err) return console.error(err);
+            if (current) {
+                if(current.control.userClass == "root"){
+                    models.users.find({"through":false},function(err,alldata){
+                        if (err) console.log(err);
+                        alldata.forEach(function(item){
+                            dataArray.push({
+                                username:item.userName,
+                                truename:item.trueName,
+                                email:item.email
+                            });
+                        });
+                        res.render('informAudit',{
+                            curUser:req.session.user,
+                            group:dataArray,
+                        });
+                    });
+                }else {
+                    console.log('该用户没有权限');
+                }
+            }else{
+                console.log('没有找到数据');
+            }
+        });
+    }else{
+        console.log('未登录');
+    }
+}
 
-// 
-exports.admin_success = function(req, res){
-    res.render('success');
-};
+//pass 模块
+exports.pass = function(req,res){
+    if (req.body.user) {
+        models.users.update({'userName':req.body.user,'trueName':req.body.trueNa},{$set:{'through':true}},function(error){
+            if (error) return console.error(error);
+            var callback = {
+                Code:1,
+                message:"success",
+            };
+            res.send(JSON.stringify(callback));
+        })
+    };
+}
