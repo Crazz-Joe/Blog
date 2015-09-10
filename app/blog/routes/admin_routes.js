@@ -17,4 +17,8 @@ module.exports = function(app){
     app.get('/admin/list', controls.admin_list);
     // 管理员修改页面
     app.get('/admin/edit/:username', controls.admin_edit);
+    //审核页面
+    app.get('/informAudit',controls.informAudit);
+    //pass url
+    app.post('/pass',controls.pass);
 };
