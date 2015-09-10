@@ -2,6 +2,20 @@ var mongoose = require('mongoose');
 // 模型的构建
 
 // 创建模式
+// 只存权限模式
+// var controlSchema = mongoose.Schema({
+//     admin: {
+//         1: '所属用户组添加用户',
+//         2: '所属用户组修改用户',
+//         3: '所属用户组删除用户',
+//         4: '所属用户组添加管理员及其权限',
+//         5: '所属用户组修改管理员及其权限',
+//         6: '所属用户组删除管理员及其权限',
+//         7: '所属用户组操作用户文章',
+//         8: '所属用户组操作用户评论',
+//         9: '所属用户组操作标签'
+//     }
+// });
 // 用户模式
 var userSchema = mongoose.Schema({
     trueName: String,
@@ -11,7 +25,7 @@ var userSchema = mongoose.Schema({
     group: [String], //用户所属的组
     phone: String,
     control: {
-        sign: String, //一串能够指明用户有哪些权限的数据
+        sign: String, //一串能够指明用户有哪些权限的数据, 从左到右分别对应controls.admin中的1~9
         userClass: String //用户类型，如果是管理员则为admin
     },
     through: Boolean

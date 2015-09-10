@@ -16,6 +16,17 @@ var isEnpty = function(data){
     return true;// 为空
 }
 
+// 判断元素是否为数组的成员
+var contain = function(arr, obj){
+    var i = arr.length;
+    while(i--){
+        if(arr[i] === obj){
+            return true;
+        }
+    }
+    return false;
+}
+
 // 登录页面
 exports.login = function(req, res){
     res.render('admin_login', {
@@ -127,10 +138,51 @@ exports.admin_add_success = function(req, res){
 };
 
 // 修改管理员——显示能被修改的管理员用户名邮箱，审核情况
-// exports.admin_list = function(req, res){
-//     models.User.find({userName: req.session.user}, function(err, users){
-//         if(err) return console.error(err);
-        
-//         models.User.find({});
-//     });
-// };
+exports.admin_list = function(req, res){
+    // 根据登录用户名返回登录用户的所属组
+    models.User.findOne({userName: req.session.user}, function(err, current){
+        // 找到current（当前用户文档）后的回调函数
+        // 错误处理
+        if(err) return console.error(err);
+        // 找到所有用户并开始筛选
+        models.User.find({}, function(err, all){
+            var child; //定义查找用户是否为当前用户的子集
+            var edit_user = []; //定义当前用户能编辑的用户列表
+            if(err) return console.error(err);
+            // 对每个用户的文档进行遍历
+            all.forEach(function(each){
+                // each 是当前遍历到的用户文档
+                // 对group进行遍历
+                for(var k = 0; k < each.group.length; k++){
+                    // 判断item是否在current.group中
+                    child = contain(current.group, each.group[k]);
+                }
+                console.log(child);
+                // 对满足为当前用户的子集条件的加入到可编辑用户列表里
+                if(child === true){
+                    edit_user.push({
+                        truename: each.trueName,
+                        username: each.userName,
+                        email: each.email,
+                        through: each.through
+                    });
+                }
+            });
+            // 调试输出可编辑用户列表
+            console.log(edit_user);
+            res.render('admin_list', {
+                title: '修改可修改管理员信息',
+                username: req.session.user,
+                groups: edit_user
+            });
+        })
+    });
+};
+
+exports.admin_edit = function(req, res){
+    console.log(req.query.username);
+    models.User.findOne({userName: req.query.username}, function(err, one){
+        // one代表找到的用户的文档
+        res.render('admin_edit');
+    });
+}

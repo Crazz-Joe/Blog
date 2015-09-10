@@ -1,0 +1,7 @@
+.list-group-item span{
+    float: none;
+}
+.message{
+    display: inline-block;
+    float: right;
+}

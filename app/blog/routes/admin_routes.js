@@ -14,5 +14,7 @@ module.exports = function(app){
     // 管理员添加成功
     app.get('/admin/add/success', controls.admin_add_success);
     // 修改管理员信息列表页面
-    // app.get('/admin/list', controls.admin_list);
+    app.get('/admin/list', controls.admin_list);
+    // 管理员修改页面
+    app.get('/admin/edit/:username', controls.admin_edit);
 };
