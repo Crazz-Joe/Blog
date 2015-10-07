@@ -1,0 +1,66 @@
+{% extends './layouts/main.html' %}
+
+{% block content %}
+<form action="" method="POST">
+
+		<div class="articleTitle">
+
+			<label for="articleTitle">编辑新文章</label>
+
+			<input type="text" placeholder="请输入文章标题" id="articleTitle" name="articleTitle">
+
+		</div>
+		<div class="author">
+
+			<label for="author">作者</label>
+
+			<input type="text" name="author" id="author">
+
+		</div>
+		<div class="addTags">
+
+			<label for="addTags">添加标签</label>
+
+			<input type="text" placeholder="添加多个标签请用空格分隔" id="addTags" name="addTags">
+
+			<!-- input type="button" value="添加" name="addBtn" id="addBtn">
+
+			<p>已添加标签：<span id="hasAdded" name="hasAdded"></span></p>
+
+			<p>常用标签：html css javascript 会议</p> -->
+		</div>
+
+		<div class="addClasses">
+			<label for="firstClass">添加分类</label>
+			<select name="firstClass" id="firstClass">
+			</select>
+			<select name="secondClass" id="secondClass">
+			</select>
+		</div>		
+		<span>{{msg}}</span>
+		<div class="editArticle">
+
+			<!-- 加载编辑器的容器 -->
+		    <script id="editor" name="articleContent" type="text/plain" style="width:1000px;min-height:300px;">   
+		    </script>
+		    
+		</div>
+
+		<input type="submit" name="publishBtn" class="btn btn-default" value="发布">
+			
+	</form>
+	<!-- ueditor配置文件 -->
+    <script type="text/javascript" src="/ueditor/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="/ueditor/ueditor.all.js"></script>
+  <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+        var ue = UE.getEditor('editor',{
+        	toolbars:[
+	        	[
+	               'fullscreen','source','undo','redo','bold','simpleupload','insertimage','attachment','edittip ','autotypeset','emotion','indent','subscript','superscript','forecolor','fontfamily','fontsize','link','justifyleft','justifyright','justifycenter','paragraph','insertorderedlist','insertunorderedlist','pagebreak'
+	        	]
+        	]
+        });
+    </script>
+{% endblock %}

@@ -23,7 +23,8 @@
     "morgan": "^1.6.1",
     "session-mongoose": "^0.5.2",
     "swig": "^1.4.2",
-    "formidable":"^1.0.14"
+    "formidable":"^1.0.14",
+    "ueditor":"^1.0.0"
   },
   "devDependencies": {}
 }

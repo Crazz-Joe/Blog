@@ -36,6 +36,7 @@ app.use(require('express').static(__dirname + '/publics'));
 
 // 加载表单处理中间件
 app.use(require('body-parser')());
+
 // 加载cookie-parser来设置和访问cookie
 app.use(require('cookie-parser')(config.cookieSecret));
 // 加载会话

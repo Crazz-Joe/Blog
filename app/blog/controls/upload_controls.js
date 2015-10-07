@@ -1,3 +1,10 @@
+/*
+*Date:2015-9-15
+*author:石佳楠
+*version:1.0
+*description:上传文件
+*已实现的功能：多文件上传写入数据库
+*/
 var formidable=require("formidable");
 var fs=require("fs");
 var path=require("path");
@@ -14,30 +21,17 @@ function deleTemp (filePath) {
 	    }
 	});
 }
-//判断是否是图片，是图片就重新命名，非图片保留原文件名
-function isImg (file,fileExt) {
-    var d=new Date();
-	var fileName=[];
-	var imgType=('.jpg.jpeg.png.gif').indexOf(fileExt.toLowerCase());
-	if (imgType===-1) {//非图片
-		fileName=file.filepath.name;	   
-	}else{
-		//以当前时间对上传文件进行重命名
-      fileName=d.getFullYear()+""+(d.getMonth()+1)+d.getDate()+d.getHours()+d.getMinutes()+d.getSeconds()+fileExt;
-	}
-	return fileName;
-};
 //操作数据库,保存文件路径
 function saveFilePath(file,fileName){
 		models.Article.update(
-			{title:"mongodb教程",author:"nancy"},
-			{$set:{
-				files:[
+			{title:"",author:"nancy"},
+			{$push:{
+				files:
 	    			{
 	                  fileName:file.filepath.name,
 	                  filepath:"/uploads/"+fileName
 	                }
-	            ]
+	            
 			}},function(err,data){
 				if (err) return console.log(err);
 				console.log(data);
@@ -45,12 +39,18 @@ function saveFilePath(file,fileName){
 		)	
 }
 exports.showUpload=function(req,res){
-	res.render("upload");
+	res.render("upload",{
+		title:"文件上传"
+	});
 }
 exports.upload=function(req,res){
+
 	var form=new formidable.IncomingForm();
 	form.maxFieldsSize=10*1024*1024;//文件最大为10M
 	form.keepExtensions = true;//使用文件的原扩展名
+	//文件移动的目录文件夹，不存在时创建目标文件夹
+	var targetDir=path.join('./publics/uploads');
+	if (!fs.existsSync(targetDir))  fs.mkdir(targetDir);
 	//临时文件目录,不存在则创建
     form.uploadDir=path.join('./publics/uploads/temp');
     if (!fs.existsSync(form.uploadDir)) fs.mkdir(form.uploadDir);
@@ -71,14 +71,11 @@ exports.upload=function(req,res){
 					break;
 				};
 			}
-		}
-		//文件移动的目录文件夹，不存在时创建目标文件夹
-		var targetDir=path.join('./publics/uploads');
-		if (!fs.existsSync(targetDir))  fs.mkdir(targetDir);
+		}	
 		//截取文件扩展名,例如.jpg
 		var fileExt=filePath.substring(filePath.lastIndexOf('.'));
 		//判断文件类型是否允许上传
-		if (('.jpg.jpeg.png.gif.docx.doc.xls.xlsx..pptx.ppt.pdf.zip.rar').indexOf(fileExt.toLowerCase())===-1) {
+		if (('.jpg.jpeg.png.gif.psd.docx.doc.xls.xlsx..pptx.ppt.pdf.zip.rar').indexOf(fileExt.toLowerCase())===-1) {
 			var err = new Error('此文件类型不允许上传');
             res.json({code:-1, message:'此文件类型不允许上传'});
             deleTemp(filePath);//删除临时文件
@@ -97,19 +94,9 @@ exports.upload=function(req,res){
                 }else{
                 	//上传成功,存入数据库
                 	saveFilePath(file,fileName);
-                	if (imgType===-1) {
-                		//非图片文件显示下载链接
-                		res.render("upload",{
-                			download:"<a href='/uploads/"+fileName+"'>"+file.filepath.name+"</a>"
-                		})
-                		
-                	}else{
-                		//显示图片
-	                	res.render("upload",{
-	                		img:"<img src='/uploads/"+fileName+"'/>"
-	            		})
-                	}
-                	
+
+                    res.redirect(303, '/article/new');
+
                 }
 			});			
 		}		

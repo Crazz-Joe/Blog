@@ -1,0 +1,22 @@
+{% extends './layouts/main.html' %}
+{% block content %}
+<div class="post">
+	<h1>{{ mytitle }}</h1>
+
+	<div class="markdown">
+	<!-- markdown语法 -->
+		{% autoescape false %}
+	    {{ mycontent }}
+	    {% endautoescape %}
+	</div>
+
+	<div class="showfile">
+
+	{% autoescape false %}
+    {{ download }}
+    {% endautoescape %}
+
+   </div>
+   
+</div>
+{% endblock %}

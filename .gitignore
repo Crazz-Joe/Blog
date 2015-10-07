@@ -32,4 +32,4 @@ sftp-config.json
 # 静态文件不上传
 files
 images
-uploads
+upload
