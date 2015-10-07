@@ -2,7 +2,7 @@
 var models = require('../models/models.js');
 
 exports.showArticles=function(req,res){
-	models.Article.findOne({author:"nancy"},function(error,result){
+	models.Article.findOne({},function(error,result){
 		if (error){
 			console.log(error);
 		} 
