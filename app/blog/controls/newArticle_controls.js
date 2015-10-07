@@ -129,7 +129,6 @@ exports.article_process = function(req, res){
                 res.render('article_new',{
                     msg:"文章发布成功！"
                 })
-                // res.redirect(303, '/article/show');
             }
         
         });

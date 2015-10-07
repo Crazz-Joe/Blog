@@ -5,7 +5,7 @@
 2. 克隆完之后，在本地创建dev分支，`git checkout -b dev origin/dev`
 3. 为确保是在dev分之下修改，每次提交修改前执行：`git checkout dev`
 4. 提交修改：`git add -A`, `git commit -m "<提交说明>"`
-5. 提交后在本地的dev分之上上传到dev分支：`git push origin dev`
+5. 提交后在本地的dev分之上上传到master分支：`git push origin master`
 6. 若出现冲突，请先使用`git pull`查看冲突
 7. Windows图形界面用户请自行查找教程
 
